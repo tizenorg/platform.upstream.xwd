@@ -1,3 +1,5 @@
+%bcond_with x
+
 Summary: dump an image of an X Window
 Name: xwd
 # NOTE: The package version should be set to the X11 major release from which
@@ -37,6 +39,10 @@ BuildRequires: xorg-x11-xbitmaps
 
 Provides: xwd
 
+%if !%{with x}
+ExclusiveArch:
+%endif
+
 %description
 X Window System window dumping utility.  Xwd allows X users to store
 window  images in a specially formatted dump file.  This file can then be read
@@ -49,8 +55,8 @@ ning of the dump and twice when the dump is completed.
 %setup -q
 
 %build
-%configure
-make
+%autogen --disable-static
+make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
