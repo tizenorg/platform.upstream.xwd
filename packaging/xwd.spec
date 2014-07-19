@@ -1,3 +1,5 @@
+%bcond_with x
+
 Summary: dump an image of an X Window
 Name: xwd
 # NOTE: The package version should be set to the X11 major release from which
@@ -33,9 +35,13 @@ BuildRequires: libpng-devel
 BuildRequires: libXfixes-devel
 BuildRequires: libXi-devel >= 1.2
 BuildRequires: libXxf86vm-devel
-BuildRequires: xorg-x11-xbitmaps
+BuildRequires: pkgconfig(xbitmaps)
 
 Provides: xwd
+
+%if !%{with x}
+ExclusiveArch:
+%endif
 
 %description
 X Window System window dumping utility.  Xwd allows X users to store
@@ -49,8 +55,8 @@ ning of the dump and twice when the dump is completed.
 %setup -q
 
 %build
-%configure
-make
+%autogen --disable-static
+make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
